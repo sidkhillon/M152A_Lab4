@@ -32,7 +32,6 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(posedge start) begin
-    lfsr <= 16'hACE1;
     delay_active <= 1;
     done_reg <= 0;
     counter <= 0;
