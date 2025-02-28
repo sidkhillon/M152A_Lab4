@@ -62,15 +62,6 @@ Countdown countdown(
     .countdown_in_action(countdown_in_action)
 );
 
-always @(posedge start_db or posedge delay_done or posedge round_over) begin
-    if (start_db)
-        game_mode <= 2'b00;
-    else if (delay_done)
-        game_mode <= 2'b01;
-    else if (round_over)
-        game_mode <= 2'b10;
-end
-
 wire delay_done;
 RandomDelay random_delay(
     .clk(clk),
@@ -171,6 +162,15 @@ Display display(
     .cathode(cathode_tmp),
     .anode(anode_tmp)
 );
+
+always @(posedge start_db or posedge delay_done or posedge round_over) begin
+    if (start_db)
+        game_mode <= 2'b00;
+    else if (delay_done)
+        game_mode <= 2'b01;
+    else if (round_over)
+        game_mode <= 2'b10;
+end
 
 assign cathode = cathode_tmp;
 assign anode = anode_tmp;
