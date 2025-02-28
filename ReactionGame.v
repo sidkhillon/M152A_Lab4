@@ -10,6 +10,8 @@ module ReactionGame(
 
 wire rst_db;
 wire start_db;
+wire switchP1_db;
+wire switchP2_db;
 
 reg start_countdown;
 reg start_reaction;
@@ -163,8 +165,8 @@ Display display(
     .anode(anode_tmp)
 );
 
-always @(posedge start_db or posedge delay_done or posedge round_over) begin
-    if (start_db)
+always @(posedge clk) begin
+    if (start_db || rst)
         game_mode <= 2'b00;
     else if (delay_done)
         game_mode <= 2'b01;

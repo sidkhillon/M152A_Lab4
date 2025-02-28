@@ -7,3 +7,4 @@ ReactionGame.v
 ScoreTracker.v
 SevenSegment.v
 Stopwatch.v
+ReactionGame_tb.v

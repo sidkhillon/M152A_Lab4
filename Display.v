@@ -33,7 +33,7 @@ module Display(
                 0: begin
                     anode_tmp = 4'b1110;
                     if (anode_countdown >= 0) begin
-                        cathode_tmp = 7'b1001100;
+                        cathode_tmp = 7'b0011100;
                     end else begin
                         cathode_tmp = 7'b1111111;
                     end
@@ -41,7 +41,7 @@ module Display(
                 1: begin
                     anode_tmp = 4'b1101;
                     if (anode_countdown >= 1) begin
-                        cathode_tmp = 7'b1001100;
+                        cathode_tmp = 7'b0011100;
                     end else begin
                         cathode_tmp = 7'b1111111;
                     end
@@ -49,7 +49,7 @@ module Display(
                 2: begin
                     anode_tmp = 4'b1011;
                     if (anode_countdown >= 2) begin
-                        cathode_tmp = 7'b1001100;
+                        cathode_tmp = 7'b0011100;
                     end else begin
                         cathode_tmp = 7'b1111111;
                     end
@@ -57,7 +57,7 @@ module Display(
                 3: begin
                     anode_tmp = 4'b0111;
                     if (anode_countdown >= 3) begin
-                        cathode_tmp = 7'b1001100;
+                        cathode_tmp = 7'b0011100;
                     end else begin
                         cathode_tmp = 7'b1111111;
                     end

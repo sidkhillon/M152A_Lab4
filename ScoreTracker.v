@@ -24,7 +24,7 @@ reg [1:0] winner_tmp;
 reg legal_to_end;
 
 
-always @(posedge clk or posedge rst or posedge round_in_action or posedge delay_done) begin
+always @(posedge clk or posedge rst) begin
     if (rst) begin
         p1Score_tmp <= 7'b0000000;
         p2Score_tmp <= 7'b0000000;
@@ -32,37 +32,38 @@ always @(posedge clk or posedge rst or posedge round_in_action or posedge delay_
         jump_start_tmp <= 0;
         winner_tmp <= 2'b00;
         legal_to_end <= 0;
-    end else if (round_in_action) begin
-        round_over_tmp <= 0;
-        jump_start_tmp <= 0;
-        winner_tmp <= 2'b00;
-        legal_to_end <= 0;
-    end else if (delay_done) begin
-        legal_to_end <= 1;
     end else begin
-        if (round_in_action) begin
-            // False start
+        if (countdown_in_action) begin
+            round_over_tmp <= 0;
+            jump_start_tmp <= 0;
+            winner_tmp <= 2'b00;
+            legal_to_end <= 0;
+        end else if (delay_done) begin
+            legal_to_end <= 1;
+        end else if (round_in_action && !round_over_tmp) begin
             if (!legal_to_end) begin
+                // False start logic
                 if (switchP1 && !switchP2) begin
                     p2Score_tmp <= p2Score_tmp + 1;
                     round_over_tmp <= 1;
                     jump_start_tmp <= 1;
-                    winner_tmp <= 2'b10;
+                    winner_tmp <= 2'b10; // P2 wins
                 end else if (switchP2 && !switchP1) begin
                     p1Score_tmp <= p1Score_tmp + 1;
                     round_over_tmp <= 1;
                     jump_start_tmp <= 1;
-                    winner_tmp <= 2'b01;
+                    winner_tmp <= 2'b01; // P1 wins
                 end
             end else begin
+                // Normal scoring logic
                 if (switchP1 && !switchP2) begin
                     p1Score_tmp <= p1Score_tmp + 1;
                     round_over_tmp <= 1;
-                    winner_tmp <= 2'b01;
+                    winner_tmp <= 2'b01; // P1 wins
                 end else if (switchP2 && !switchP1) begin
                     p2Score_tmp <= p2Score_tmp + 1;
                     round_over_tmp <= 1;
-                    winner_tmp <= 2'b10;
+                    winner_tmp <= 2'b10; // P2 wins
                 end
             end
         end
