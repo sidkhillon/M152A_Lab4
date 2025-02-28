@@ -72,8 +72,12 @@ always @(posedge delay_done) begin
     legal_to_end <= 1;
 end
 
-assign p1Score = p1Score_tmp;
-assign p2Score = p2Score_tmp;
+
+assign p1Score_left = p1Score_tmp / 10;
+assign p1Score_right = p1Score_tmp % 10;
+assign p2Score_left = p2Score_tmp / 10;
+assign p2Score_right = p2Score_tmp % 10;
+
 assign round_over = round_over_tmp;
 assign jump_start = jump_start_tmp;
 assign winner = winner_tmp;

@@ -28,6 +28,18 @@ Debouncer start_debouncer(
     .btn_db(start_db)
 );
 
+Debouncer switchP1_debouncer(
+    .clk(clk),
+    .btn(switchP1),
+    .btn_db(switchP1_db)
+);
+
+Debouncer switchP2_debouncer(
+    .clk(clk),
+    .btn(switchP2),
+    .btn_db(switchP2_db)
+);
+
 // Clocks
 wire clk_1kHz, clk_display, clk_blink, clk_countdown;
 ClockFactory clock_factory(
@@ -76,8 +88,8 @@ ScoreTracker score_tracker(
     .countdown_in_action(countdown_in_action),
     .delay_done(delay_done),
     .round_in_action(countdown_done),
-    .switchP1(switchP1),
-    .switchP2(switchP2),
+    .switchP1(switchP1_db),
+    .switchP2(switchP2_db),
     .p1Score_left(p1Score_left),
     .p1Score_right(p1Score_right),
     .p2Score_left(p2Score_left),
