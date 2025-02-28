@@ -62,8 +62,13 @@ Countdown countdown(
     .countdown_in_action(countdown_in_action)
 );
 
-always @(posedge start_db) begin
-    game_mode <= 2'b00;
+always @(posedge start_db or posedge delay_done or posedge round_over) begin
+    if (start_db)
+        game_mode <= 2'b00;
+    else if (delay_done)
+        game_mode <= 2'b01;
+    else if (round_over)
+        game_mode <= 2'b10;
 end
 
 wire delay_done;
@@ -74,10 +79,6 @@ RandomDelay random_delay(
     .start(countdown_done),
     .done(delay_done)
 );
-
-always @(posedge delay_done) begin
-    game_mode <= 2'b01;
-end
 
 wire [3:0] p1Score_left, p1Score_right, p2Score_left, p2Score_right;
 wire round_over, jump_start;
@@ -110,9 +111,7 @@ Stopwatch stopwatch(
     .ms0(ms0)
 );
 
-always @(posedge round_over) begin
-    game_mode <= 2'b10;
-end
+
 
 wire [6:0] p1Score_left_7seg, p1Score_right_7seg, p2Score_left_7seg, p2Score_right_7seg;
 SevenSegment p1Score_left_encoder(
