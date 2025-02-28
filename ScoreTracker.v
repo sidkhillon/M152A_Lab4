@@ -24,7 +24,7 @@ reg [1:0] winner_tmp;
 reg legal_to_end;
 
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk or posedge rst or posedge round_in_action or posedge delay_done) begin
     if (rst) begin
         p1Score_tmp <= 7'b0000000;
         p2Score_tmp <= 7'b0000000;
@@ -32,46 +32,42 @@ always @(posedge clk or posedge rst) begin
         jump_start_tmp <= 0;
         winner_tmp <= 2'b00;
         legal_to_end <= 0;
-    end
-    if (round_in_action) begin
-        // False start
-        if (!legal_to_end) begin
-            if (switchP1 && !switchP2) begin
-                p2Score_tmp <= p2Score_tmp + 1;
-                round_over_tmp <= 1;
-                jump_start_tmp <= 1;
-                winner_tmp <= 2'b10;
-            end else if (switchP2 && !switchP1) begin
-                p1Score_tmp <= p1Score_tmp + 1;
-                round_over_tmp <= 1;
-                jump_start_tmp <= 1;
-                winner_tmp <= 2'b01;
-            end
-        end else begin
-            if (switchP1 && !switchP2) begin
-                p1Score_tmp <= p1Score_tmp + 1;
-                round_over_tmp <= 1;
-                winner_tmp <= 2'b01;
-            end else if (switchP2 && !switchP1) begin
-                p2Score_tmp <= p2Score_tmp + 1;
-                round_over_tmp <= 1;
-                winner_tmp <= 2'b10;
+    end else if (round_in_action) begin
+        round_over_tmp <= 0;
+        jump_start_tmp <= 0;
+        winner_tmp <= 2'b00;
+        legal_to_end <= 0;
+    end else if (delay_done) begin
+        legal_to_end <= 1;
+    end else begin
+        if (round_in_action) begin
+            // False start
+            if (!legal_to_end) begin
+                if (switchP1 && !switchP2) begin
+                    p2Score_tmp <= p2Score_tmp + 1;
+                    round_over_tmp <= 1;
+                    jump_start_tmp <= 1;
+                    winner_tmp <= 2'b10;
+                end else if (switchP2 && !switchP1) begin
+                    p1Score_tmp <= p1Score_tmp + 1;
+                    round_over_tmp <= 1;
+                    jump_start_tmp <= 1;
+                    winner_tmp <= 2'b01;
+                end
+            end else begin
+                if (switchP1 && !switchP2) begin
+                    p1Score_tmp <= p1Score_tmp + 1;
+                    round_over_tmp <= 1;
+                    winner_tmp <= 2'b01;
+                end else if (switchP2 && !switchP1) begin
+                    p2Score_tmp <= p2Score_tmp + 1;
+                    round_over_tmp <= 1;
+                    winner_tmp <= 2'b10;
+                end
             end
         end
     end
 end
-
-always @(posedge round_in_action) begin
-    round_over_tmp <= 0;
-    jump_start_tmp <= 0;
-    winner_tmp <= 2'b00;
-    legal_to_end <= 0;
-end
-
-always @(posedge delay_done) begin
-    legal_to_end <= 1;
-end
-
 
 assign p1Score_left = p1Score_tmp / 10;
 assign p1Score_right = p1Score_tmp % 10;
