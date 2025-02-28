@@ -41,6 +41,7 @@ always @(posedge clk or posedge rst) begin
         if (clk_1kHz && !clk_1kHz_prev && delay_active) begin
             if (counter == delay_ms - 1) begin
                 delay_active <= 0;
+                counter <= 0;
                 done_reg <= 1;
             end else begin
                 counter <= counter + 1;

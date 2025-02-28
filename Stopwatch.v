@@ -19,7 +19,11 @@ always @(posedge clk_1kHz or posedge rst) begin
         if (!pause) begin
             if (ms == 10'd999) begin
                 ms <= 10'd0;
-                seconds <= seconds + 1;
+                if (seconds == 4'd10) begin
+                    seconds <= 4'd0;
+                end else begin
+                    seconds <= seconds + 1;
+                end
             end else begin
                 ms <= ms + 1;
             end
@@ -27,7 +31,7 @@ always @(posedge clk_1kHz or posedge rst) begin
     end
 end
 
-assign sec0 = seconds[3:0];
+assign sec0 = seconds;
 assign ms2 = ms / 100;
 assign ms1 = (ms % 100) / 10;
 assign ms0 = ms % 10;

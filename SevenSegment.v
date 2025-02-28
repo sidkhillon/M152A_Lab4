@@ -10,7 +10,7 @@ always @(digit) begin
         4'h0: seg_tmp = 7'b0000001;
         4'h1: seg_tmp = 7'b1001111;
         4'h2: seg_tmp = 7'b0010010;
-        4'h3: seg_tmp = 7'b0110000;
+        4'h3: seg_tmp = 7'b0000110;
         4'h4: seg_tmp = 7'b1001100;
         4'h5: seg_tmp = 7'b0100100;
         4'h6: seg_tmp = 7'b0100000;

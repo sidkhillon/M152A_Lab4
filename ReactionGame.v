@@ -93,18 +93,18 @@ ScoreTracker score_tracker(
     .winner(winner)
 );
 
+wire stopwatch_rst;
+assign stopwatch_rst = rst_db || start_db;
 wire [3:0] sec0, ms2, ms1, ms0;
 Stopwatch stopwatch(
     .clk_1kHz(clk_1kHz),
-    .rst(rst_db),
+    .rst(stopwatch_rst),
     .pause(round_over),
     .sec0(sec0),
     .ms2(ms2),
     .ms1(ms1),
     .ms0(ms0)
 );
-
-
 
 wire [6:0] p1Score_left_7seg, p1Score_right_7seg, p2Score_left_7seg, p2Score_right_7seg;
 SevenSegment p1Score_left_encoder(
@@ -166,11 +166,11 @@ Display display(
 );
 
 always @(posedge clk) begin
-    if (start_db || rst)
+    if (start_db)
         game_mode <= 2'b00;
     else if (delay_done)
         game_mode <= 2'b01;
-    else if (round_over)
+    else if (round_over || rst_db)
         game_mode <= 2'b10;
 end
 
