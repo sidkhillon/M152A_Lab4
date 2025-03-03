@@ -22,7 +22,7 @@ reg round_over_tmp;
 reg jump_start_tmp;
 reg [1:0] winner_tmp;
 reg legal_to_end;
-
+reg countdown_prev;
 
 always @(posedge clk or posedge rst) begin
     if (rst) begin
@@ -33,7 +33,7 @@ always @(posedge clk or posedge rst) begin
         winner_tmp <= 2'b00;
         legal_to_end <= 0;
     end else begin
-        if (countdown_in_action) begin
+        if (countdown_in_action && !countdown_prev) begin
             round_over_tmp <= 0;
             jump_start_tmp <= 0;
             winner_tmp <= 2'b00;
@@ -67,6 +67,8 @@ always @(posedge clk or posedge rst) begin
                 end
             end
         end
+
+        countdown_prev <= countdown_in_action;
     end
 end
 
