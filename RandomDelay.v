@@ -26,16 +26,17 @@ always @(posedge clk or posedge rst) begin
         clk_1kHz_prev <= 0;
     end else if (start) begin
         delay_active <= 1;
-        done_reg <= 0;
         counter <= 0;
         delay_ms <= (lfsr[11:0] % 4000) + 1000;
-        clk_1kHz_prev <= clk_1kHz;
     end else begin
         // Update LFSR on every clock
         lfsr <= {lfsr[14:0], feedback};
         
         // Detect rising edge of clk_1kHz
         clk_1kHz_prev <= clk_1kHz;
+
+        if (done_reg)
+            done_reg <= 0;
         
         // Only increment counter on rising edge of clk_1kHz
         if (clk_1kHz && !clk_1kHz_prev && delay_active) begin
