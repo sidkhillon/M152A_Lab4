@@ -2,38 +2,33 @@ module Countdown(
     input wire clk_countdown,
     input wire rst,
     input wire start,
-    output wire [1:0] anode,
-    output wire countdown_done,
-    output wire countdown_in_action
+    output reg [1:0] anode,
+    output reg countdown_done,
+    output reg countdown_in_action
 );
 
-reg [1:0] anode_tmp;
-reg countdown_in_action_tmp = 0;
-reg countdown_done_tmp;
-
-always @(posedge clk_countdown or posedge rst or posedge start) begin
+always @(posedge clk_countdown or posedge rst) begin
     if (rst) begin
-        anode_tmp <= 2'b00;
-        countdown_done_tmp <= 0;
-        countdown_in_action_tmp <= 0;
+        anode <= 2'b00;
+        countdown_done <= 0;
+        countdown_in_action <= 0;
     end else if (start) begin
-        anode_tmp <= 2'b00;
-        countdown_done_tmp <= 0;
-        countdown_in_action_tmp <= 1;
+        anode <= 2'b00;
+        countdown_done <= 0;
+        countdown_in_action <= 1;
     end else begin
-        if (countdown_in_action_tmp) begin
-            if (anode_tmp == 3) begin
-                countdown_done_tmp <= 1;
-                countdown_in_action_tmp <= 0;
+        if (countdown_in_action) begin
+            if (anode == 2'd3) begin
+                countdown_done <= 1;
+                countdown_in_action <= 0;
             end else begin
-                anode_tmp <= anode_tmp + 1;
+                anode <= anode + 1;
+                countdown_done <= 0;
             end
+        end else begin
+            countdown_done <= 0;
         end
     end
 end
-
-assign anode = anode_tmp;
-assign countdown_done = countdown_done_tmp;
-assign countdown_in_action = countdown_in_action_tmp;
 
 endmodule
