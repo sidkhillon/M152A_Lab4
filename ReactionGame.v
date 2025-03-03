@@ -73,6 +73,9 @@ RandomDelay random_delay(
     .done(delay_done)
 );
 
+wire round_in_action;
+assign round_in_action = (game_mode == 2'b00 || game_mode == 2'b01);
+
 wire [3:0] p1Score_left, p1Score_right, p2Score_left, p2Score_right;
 wire round_over, jump_start;
 wire [1:0] winner;
@@ -81,7 +84,7 @@ ScoreTracker score_tracker(
     .rst(rst_db),
     .countdown_in_action(countdown_in_action),
     .delay_done(delay_done),
-    .round_in_action(countdown_done),
+    .round_in_action(round_in_action),
     .switchP1(switchP1_db),
     .switchP2(switchP2_db),
     .p1Score_left(p1Score_left),
