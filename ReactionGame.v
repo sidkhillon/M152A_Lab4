@@ -16,7 +16,7 @@ wire switchP2_db;
 reg start_countdown;
 reg start_reaction;
 
-reg [1:0] game_mode; // 00: countdown, 01: stopwatch, 10: score
+reg [1:0] game_mode; // 00: countdown, 01: stopwatch, 10: show stopwatch, 11: score
 
 Debouncer rst_debouncer(
     .clk(clk),
@@ -168,13 +168,38 @@ Display display(
     .anode(anode_tmp)
 );
 
-always @(posedge clk) begin
-    if (start_db)
-        game_mode <= 2'b00;
-    else if (delay_done)
-        game_mode <= 2'b01;
-    else if (round_over || rst_db)
-        game_mode <= 2'b10;
+reg [31:0] stopwatch_display_timer;
+always @(posedge clk or posedge rst_db) begin
+    if (rst_db) begin
+        game_mode <= 2'b11;
+    end else begin
+
+        case(game_mode)
+            2'b00: begin
+                if (delay_done) begin
+                    game_mode <= 2'b01;
+                end
+            end
+            2'b01: begin
+                if (round_over) begin
+                    game_mode <= 2'b10;
+                    stopwatch_display_timer <= 0;
+                end
+            end
+            2'b10: begin
+                if (stopwatch_display_timer >= 200_000_000) begin
+                    game_mode <= 2'b11;
+                end else begin
+                    stopwatch_display_timer <= stopwatch_display_timer + 1;
+                end
+            end
+            2'b11: begin
+                if (start_db) begin
+                    game_mode <= 2'b00;
+                end
+            end
+        endcase
+    end
 end
 
 assign cathode = cathode_tmp;
