@@ -98,11 +98,14 @@ ScoreTracker score_tracker(
 
 wire stopwatch_rst;
 assign stopwatch_rst = rst_db || delay_done;
+
+wire stopwatch_pause;
+assign stopwatch_pause = (game_mode == 2'b10);
 wire [3:0] sec0, ms2, ms1, ms0;
 Stopwatch stopwatch(
     .clk_1kHz(clk_1kHz),
     .rst(stopwatch_rst),
-    .pause(round_over),
+    .pause(stopwatch_pause),
     .sec0(sec0),
     .ms2(ms2),
     .ms1(ms1),

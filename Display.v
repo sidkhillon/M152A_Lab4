@@ -69,7 +69,7 @@ module Display(
             endcase
         end
 
-        if (game_mode == 1) begin
+        if (game_mode == 1 || game_mode == 2) begin
             if (jump_start) begin
                 cathode_tmp = 7'b1111110; // slash
                 case(screen)
@@ -115,7 +115,7 @@ module Display(
             end
         end
 
-        if (game_mode == 2) begin
+        if (game_mode == 3) begin
             case (screen)
                 2'd0: begin
                     cathode_tmp = p1Score_left;
