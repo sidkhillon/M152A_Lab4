@@ -97,7 +97,7 @@ ScoreTracker score_tracker(
 );
 
 wire stopwatch_rst;
-assign stopwatch_rst = rst_db || start_db;
+assign stopwatch_rst = rst_db || delay_done;
 wire [3:0] sec0, ms2, ms1, ms0;
 Stopwatch stopwatch(
     .clk_1kHz(clk_1kHz),
