@@ -8,32 +8,45 @@ module Countdown(
     output reg countdown_in_action
 );
 
-reg start_latched;
+reg start_sync1, start_sync2;  
+reg start_pulse;
 
-always @(posedge clk or posedge clk_countdown or posedge rst) begin
-    if (clk && start) begin
-        start_latched <= 1;
-    end else if (rst) begin
+always @(posedge clk_countdown or posedge rst) begin
+    if (rst) begin
+        start_sync1 <= 0;
+        start_sync2 <= 0;
+    end else begin
+        start_sync1 <= start;
+        start_sync2 <= start_sync1;
+    end
+end
+
+always @(posedge clk_countdown or posedge rst) begin
+    if (rst)
+        start_pulse <= 0;
+    else
+        start_pulse <= start_sync2 & ~start_pulse;
+end
+
+always @(posedge clk_countdown or posedge rst) begin
+    if (rst) begin
         anode <= 2'b00;
         countdown_done <= 0;
         countdown_in_action <= 0;
-    end else if (start_latched) begin
+    end else if (start_pulse) begin
         anode <= 2'b00;
         countdown_done <= 0;
         countdown_in_action <= 1;
-        start_latched <= 0;
-    end else begin
-        if (countdown_in_action) begin
-            if (anode == 2'd3) begin
-                countdown_done <= 1;
-                countdown_in_action <= 0;
-            end else begin
-                anode <= anode + 1;
-                countdown_done <= 0;
-            end
+    end else if (countdown_in_action) begin
+        if (anode == 2'd3) begin
+            countdown_done <= 1;
+            countdown_in_action <= 0;
         end else begin
+            anode <= anode + 1;
             countdown_done <= 0;
         end
+    end else begin
+        countdown_done <= 0;
     end
 end
 
