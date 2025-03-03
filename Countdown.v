@@ -10,16 +10,10 @@ module Countdown(
 
 reg start_latched;
 
-always @(posedge clk or posedge rst) begin
-    if (rst) begin
-        start_latched <= 0;
-    end else begin
+always @(posedge clk or posedge clk_countdown or posedge rst) begin
+    if (clk && start) begin
         start_latched <= 1;
-    end
-end
-
-always @(posedge clk_countdown or posedge rst) begin
-    if (rst) begin
+    end else if (rst) begin
         anode <= 2'b00;
         countdown_done <= 0;
         countdown_in_action <= 0;
