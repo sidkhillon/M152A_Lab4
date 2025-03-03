@@ -56,6 +56,7 @@ ClockFactory clock_factory(
 wire [1:0] anode_countdown;
 wire countdown_done, countdown_in_action;
 Countdown countdown(
+    .clk(clk),
     .clk_countdown(clk_countdown),
     .rst(rst_db),
     .start(start_db),
