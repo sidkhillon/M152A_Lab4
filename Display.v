@@ -19,16 +19,19 @@ module Display(
     input wire [1:0] anode_countdown,
 
     output wire [6:0] cathode,
-    output wire [3:0] anode
+    output wire [3:0] anode,
+    output wire dp
 );
 
     reg [6:0] cathode_tmp;
     reg [3:0] anode_tmp;
+    reg dp_tmp;
     reg [1:0] screen = 0;
 
     always @(posedge clk_display) begin
         screen <= screen + 1;
         if (game_mode == 0) begin
+            dp_tmp = 1;
             case (screen)
                 0: begin
                     anode_tmp = 4'b1110;
@@ -71,6 +74,7 @@ module Display(
 
         if (game_mode == 1 || game_mode == 2) begin
             if (jump_start) begin
+                dp_tmp = 1;
                 cathode_tmp = 7'b1111110; // slash
                 case(screen)
                     2'd0: begin
@@ -94,28 +98,34 @@ module Display(
                     2'd0: begin
                         cathode_tmp = sec0;
                         anode_tmp = 4'b1110;
+                        dp_tmp = 0;
                     end
                     2'd1: begin
                         cathode_tmp = ms2;
                         anode_tmp = 4'b1101;
+                        dp_tmp = 1;
                     end
                     2'd2: begin
                         cathode_tmp = ms1;
                         anode_tmp = 4'b1011;
+                        dp_tmp = 1;
                     end
                     2'd3: begin
                         cathode_tmp = ms0;
                         anode_tmp = 4'b0111;
+                        dp_tmp = 1;
                     end
                     default: begin
                         cathode_tmp = 7'b1111111;
                         anode_tmp = 4'b1111;
+                        dp_tmp = 1;
                     end
                 endcase
             end
         end
 
         if (game_mode == 3) begin
+            dp_tmp = 1;
             case (screen)
                 2'd0: begin
                     cathode_tmp = p1Score_left;
@@ -155,5 +165,6 @@ module Display(
 
     assign cathode = cathode_tmp;
     assign anode = anode_tmp;
+    assign dp = dp_tmp;
 
 endmodule

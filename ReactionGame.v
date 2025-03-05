@@ -5,7 +5,8 @@ module ReactionGame(
     input wire switchP1,
     input wire switchP2,
     output wire [6:0] cathode,
-    output wire [3:0] anode
+    output wire [3:0] anode,
+    output wire dp
 );
 
 wire rst_db;
@@ -150,6 +151,7 @@ SevenSegment ms0_encoder(
 
 wire [6:0] cathode_tmp;
 wire [3:0] anode_tmp;
+wire dp_tmp;
 Display display(
     .clk(clk),
     .clk_display(clk_display),
@@ -168,7 +170,8 @@ Display display(
     .jump_start(jump_start),
     .anode_countdown(anode_countdown),
     .cathode(cathode_tmp),
-    .anode(anode_tmp)
+    .anode(anode_tmp),
+    .dp(dp_tmp)
 );
 
 reg [31:0] stopwatch_display_timer;
@@ -210,6 +213,6 @@ end
 
 assign cathode = cathode_tmp;
 assign anode = anode_tmp;
-
+assign dp = dp_tmp;
 
 endmodule
