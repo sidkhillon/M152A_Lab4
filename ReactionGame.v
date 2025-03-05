@@ -181,6 +181,9 @@ always @(posedge clk or posedge rst_db) begin
             2'b00: begin
                 if (delay_done) begin
                     game_mode <= 2'b01;
+                end else if (round_over) begin
+                    game_mode <= 2'b10;
+                    stopwatch_display_timer <= 0;
                 end
             end
             2'b01: begin
